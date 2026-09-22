@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="QuickLink - a simple Go URL shortener">
+    <title>QuickLink — Short links, instantly</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+
+    <header class="topbar">
+        <a class="brand" href="/" aria-label="QuickLink home">
+            <span class="brand-mark">Q</span>
+            <span>
+                <strong>QuickLink</strong>
+                <small>GO URL SHORTENER</small>
+            </span>
+        </a>
+        <span class="status"><i></i> Local server</span>
+    </header>
+
+    <main class="page-shell">
+        <section class="hero">
+            <div class="hero-copy">
+                <div class="eyebrow"><span></span> SIMPLE. FAST. CLEAN.</div>
+                <h1>Make long URLs <em>shorter.</em></h1>
+                <p>Paste a link, choose an optional custom alias, and get a clean URL from a tiny Go backend.</p>
+
+                <div class="flow-row" aria-label="How it works">
+                    <div><b>01</b><span>Paste URL</span></div>
+                    <i></i>
+                    <div><b>02</b><span>Go creates code</span></div>
+                    <i></i>
+                    <div><b>03</b><span>Redirect</span></div>
+                </div>
+            </div>
+
+            <div class="app-card">
+                <div class="card-head">
+                    <div>
+                        <span class="mini-label">NEW SHORT LINK</span>
+                        <h2>Shorten a URL</h2>
+                    </div>
+                    <span class="endpoint">POST /api/shorten</span>
+                </div>
+
+                <form id="shortenForm">
+                    <label for="longUrl">Long URL <span>*</span></label>
+                    <div class="input-wrap url-field">
+                        <span class="field-icon">↗</span>
+                        <input id="longUrl" type="url" placeholder="https://example.com/very/long/url" autocomplete="url" required>
+                    </div>
+
+                    <div class="alias-row">
+                        <div>
+                            <label for="alias">Custom alias <small>optional</small></label>
+                            <div class="input-wrap alias-field">
+                                <span class="alias-prefix">/</span>
+                                <input id="alias" type="text" placeholder="my-link" minlength="5">
+                            </div>
+                            <p class="field-note">Minimum 5 characters</p>
+                        </div>
+                        <button id="shortenBtn" type="submit">
+                            <span>Shorten link</span>
+                            <b>→</b>
+                        </button>
+                    </div>
+                </form>
+
+                <div id="message" class="message" role="status" aria-live="polite"></div>
+
+                <section id="resultCard" class="result-card" hidden>
+                    <div class="result-accent"></div>
+                    <div class="result-label">
+                        <span><i></i> READY</span>
+                        <small>Your short URL</small>
+                    </div>
+                    <div class="result-line">
+                        <a id="shortUrl" href="#" target="_blank" rel="noreferrer"></a>
+                        <div class="result-actions">
+                            <button id="copyBtn" type="button">Copy</button>
+                            <a id="openBtn" href="#" target="_blank" rel="noreferrer">Open ↗</a>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </section>
+
+        <section class="explain-grid">
+            <article>
+                <span class="accent cyan"></span>
+                <small>FRONTEND</small>
+                <h3>Send JSON</h3>
+                <p>JavaScript sends the long URL and alias to the Go API.</p>
+            </article>
+            <article>
+                <span class="accent violet"></span>
+                <small>BACKEND</small>
+                <h3>Create a code</h3>
+                <p>Go validates the URL and stores code → URL in memory.</p>
+            </article>
+            <article>
+                <span class="accent amber"></span>
+                <small>REDIRECT</small>
+                <h3>Open the target</h3>
+                <p>Visiting /code finds the original URL and redirects to it.</p>
+            </article>
+        </section>
+    </main>
+
+    <footer>
+        <span>QuickLink</span>
+        <span>Go standard library · No database · Easy to explain</span>
+    </footer>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
