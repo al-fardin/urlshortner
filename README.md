@@ -1,20 +1,20 @@
-# QuickLink — Simple Go URL Shortener
+# QuickLink — Go URL Shortener
 
-A small URL shortener made with Go's standard library and a plain HTML/CSS/JS frontend.
+A small URL shortener built with the Go standard library and a V6-style organic frontend.
 
-## Folder structure
+## Project structure
 
 ```text
 quicklink-v6-simple/
-├── main.go              # Server + routes
+├── main.go
 ├── handlers/
-│   └── url.go           # Shorten API + redirect logic
+│   └── url.go
 ├── storage/
-│   └── memory.go        # In-memory map storage
+│   └── memory.go
 ├── static/
-│   ├── index.html       # Frontend structure
-│   ├── style.css        # V6-inspired UI
-│   └── script.js        # Frontend API call + copy button
+│   ├── index.html
+│   ├── style.css
+│   └── script.js
 ├── go.mod
 └── README.md
 ```
@@ -25,59 +25,39 @@ quicklink-v6-simple/
 go run .
 ```
 
-Optional custom port:
+Open `http://localhost:8080`.
 
-```bash
-PORT=5000 go run .
+To use another port:
+
+**CMD**
+```cmd
+set PORT=5000
+go run .
 ```
 
-Open:
-
-```text
-http://localhost:8080
+**PowerShell**
+```powershell
+$env:PORT="5000"
+go run .
 ```
 
 ## API
 
 ### Create short URL
 
-```http
-POST /api/shorten
-Content-Type: application/json
-```
-
-Example body:
+`POST /api/shorten`
 
 ```json
 {
-  "longUrl": "https://example.com/very/long/path",
+  "longUrl": "https://example.com/long/path",
   "alias": "my-link"
-}
-```
-
-Example response:
-
-```json
-{
-  "shortUrl": "http://localhost:8080/my-link",
-  "code": "my-link"
 }
 ```
 
 ### Redirect
 
-```http
-GET /my-link
-```
+Open `GET /my-link` and the server returns a 302 redirect to the saved destination.
 
-The server finds `my-link` in memory and redirects to the original URL.
+## Note
 
-## Easy explanation
-
-1. `script.js` sends JSON to `POST /api/shorten`.
-2. `handlers/url.go` validates the URL and creates/uses a short code.
-3. `storage/memory.go` stores `code -> original URL` in a Go map.
-4. Visiting `/{code}` calls the redirect handler.
-5. The handler reads the original URL and sends an HTTP redirect.
-
-> Data is stored only in memory, so links reset when the server restarts. This keeps the project intentionally simple.
+Links are stored in memory, so restarting the Go server clears them.

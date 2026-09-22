@@ -3,117 +3,291 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="QuickLink - a simple Go URL shortener">
-    <title>QuickLink — Short links, instantly</title>
+    <meta name="description" content="QuickLink - a simple Go URL shortener with custom aliases and fast redirects">
+    <title>QuickLink — Go URL Shortener</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <div class="ambient ambient-one"></div>
-    <div class="ambient ambient-two"></div>
+    <svg aria-hidden="true" width="0" height="0" class="svg-defs">
+        <defs>
+            <filter id="organicWobble" x="-8%" y="-8%" width="116%" height="116%">
+                <feTurbulence type="fractalNoise" baseFrequency="0.006 0.019" numOctaves="2" seed="8" result="noise"/>
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="3.2" xChannelSelector="R" yChannelSelector="G"/>
+            </filter>
+            <linearGradient id="latencyArea" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#22b8cf" stop-opacity=".22"/>
+                <stop offset="1" stop-color="#22b8cf" stop-opacity="0"/>
+            </linearGradient>
+        </defs>
+    </svg>
 
-    <header class="topbar">
-        <a class="brand" href="/" aria-label="QuickLink home">
-            <span class="brand-mark">Q</span>
-            <span>
-                <strong>QuickLink</strong>
-                <small>GO URL SHORTENER</small>
-            </span>
-        </a>
-        <span class="status"><i></i> Local server</span>
-    </header>
+    <div class="ambient-bg" aria-hidden="true">
+        <div class="ambient-blob blob-a"></div>
+        <div class="ambient-blob blob-b"></div>
+        <svg class="contour contour-one" viewBox="0 0 520 420">
+            <path d="M72 335C34 294 41 222 82 168C126 110 187 73 258 64C332 54 414 78 451 137C488 196 472 276 420 326C365 379 284 393 209 382C152 374 107 365 72 335Z"/>
+            <path d="M104 316C75 284 81 235 114 192C149 147 201 118 260 110C320 101 382 120 412 164C443 209 431 266 393 302C353 340 293 353 235 345C184 338 132 347 104 316Z"/>
+            <path d="M138 292C118 269 125 237 149 210C176 180 217 160 260 155C304 150 347 164 367 191C388 219 379 254 352 279C325 304 287 312 249 307C211 301 158 316 138 292Z"/>
+        </svg>
+    </div>
 
-    <main class="page-shell">
-        <section class="hero">
-            <div class="hero-copy">
-                <div class="eyebrow"><span></span> SIMPLE. FAST. CLEAN.</div>
-                <h1>Make long URLs <em>shorter.</em></h1>
-                <p>Paste a link, choose an optional custom alias, and get a clean URL from a tiny Go backend.</p>
+    <div class="nav-wrap">
+        <header class="container nav">
+            <a class="brand" href="#top" aria-label="QuickLink home">
+                <span class="brand-mark">Q</span>
+                <span class="brand-copy"><strong>QuickLink</strong><small>GO URL SHORTENER</small></span>
+            </a>
 
-                <div class="flow-row" aria-label="How it works">
-                    <div><b>01</b><span>Paste URL</span></div>
-                    <i></i>
-                    <div><b>02</b><span>Go creates code</span></div>
-                    <i></i>
-                    <div><b>03</b><span>Redirect</span></div>
-                </div>
+            <nav class="nav-links" aria-label="Primary navigation">
+                <a href="#shorten">Shorten</a>
+                <a href="#live">Live view</a>
+                <a href="#how">How it works</a>
+            </nav>
+
+            <div class="nav-action">
+                <a class="wave-btn slim" href="#shorten">
+                    <span>Create link</span>
+                    <svg viewBox="0 0 220 60" preserveAspectRatio="none" aria-hidden="true"><path d="M30 3 C55 9 78 0 106 5 C136 10 158 1 190 6 L218 30 L190 54 C160 59 136 50 108 55 C80 60 55 50 30 57 L2 30 Z"/></svg>
+                </a>
             </div>
+        </header>
+    </div>
 
-            <div class="app-card">
-                <div class="card-head">
-                    <div>
-                        <span class="mini-label">NEW SHORT LINK</span>
-                        <h2>Shorten a URL</h2>
+    <main id="top">
+        <section class="hero" id="shorten">
+            <div class="container hero-grid">
+                <div class="hero-copy">
+                    <div class="problem-chip"><i></i> Simple Go backend · clean redirect flow</div>
+                    <h1>Turn long URLs into <span>clean links.</span></h1>
+                    <p>Paste a destination, choose an optional alias, and get a shareable short link. The backend stays intentionally small: validate, store, redirect.</p>
+
+                    <div class="hero-pills" aria-label="Project highlights">
+                        <span>Custom alias</span>
+                        <span>302 redirect</span>
+                        <span>Go stdlib</span>
                     </div>
-                    <span class="endpoint">POST /api/shorten</span>
+
+                    <div class="hero-steps" aria-label="Main flow">
+                        <div><b>01</b><span>Paste</span></div>
+                        <i></i>
+                        <div><b>02</b><span>Shorten</span></div>
+                        <i></i>
+                        <div><b>03</b><span>Share</span></div>
+                    </div>
                 </div>
 
-                <form id="shortenForm">
-                    <label for="longUrl">Long URL <span>*</span></label>
-                    <div class="input-wrap url-field">
-                        <span class="field-icon">↗</span>
-                        <input id="longUrl" type="url" placeholder="https://example.com/very/long/url" autocomplete="url" required>
-                    </div>
-
-                    <div class="alias-row">
+                <section class="shortener-card organic-surface" aria-labelledby="shortenerTitle">
+                    <div class="card-head">
                         <div>
-                            <label for="alias">Custom alias <small>optional</small></label>
-                            <div class="input-wrap alias-field">
-                                <span class="alias-prefix">/</span>
-                                <input id="alias" type="text" placeholder="my-link" minlength="5">
-                            </div>
-                            <p class="field-note">Minimum 5 characters</p>
+                            <span class="mono">New short link</span>
+                            <h2 id="shortenerTitle">Shorten a URL</h2>
                         </div>
-                        <button id="shortenBtn" type="submit">
-                            <span>Shorten link</span>
-                            <b>→</b>
-                        </button>
+                        <span class="endpoint">POST /api/shorten</span>
                     </div>
-                </form>
 
-                <div id="message" class="message" role="status" aria-live="polite"></div>
+                    <form id="shortenForm" novalidate>
+                        <label for="longUrl">Long URL <span>*</span></label>
+                        <div class="input-wrap url-field">
+                            <span class="field-icon">↗</span>
+                            <input id="longUrl" type="url" placeholder="https://example.com/very/long/url" autocomplete="url" required>
+                        </div>
 
-                <section id="resultCard" class="result-card" hidden>
-                    <div class="result-accent"></div>
-                    <div class="result-label">
-                        <span><i></i> READY</span>
-                        <small>Your short URL</small>
-                    </div>
-                    <div class="result-line">
-                        <a id="shortUrl" href="#" target="_blank" rel="noreferrer"></a>
+                        <div class="alias-row">
+                            <div class="alias-control">
+                                <label for="alias">Custom alias <small>optional</small></label>
+                                <div class="input-wrap alias-field">
+                                    <span class="alias-prefix">/</span>
+                                    <input id="alias" type="text" placeholder="my-link" minlength="5" autocomplete="off">
+                                </div>
+                                <p class="field-note">At least 5 characters. No spaces, /, ? or #.</p>
+                            </div>
+
+                            <button id="shortenBtn" class="wave-btn dark form-submit" type="submit">
+                                <span>Shorten link</span>
+                                <svg viewBox="0 0 220 60" preserveAspectRatio="none" aria-hidden="true"><path d="M30 3 C55 9 78 0 106 5 C136 10 158 1 190 6 L218 30 L190 54 C160 59 136 50 108 55 C80 60 55 50 30 57 L2 30 Z"/></svg>
+                            </button>
+                        </div>
+                    </form>
+
+                    <div id="message" class="message" role="status" aria-live="polite"></div>
+
+                    <div id="resultCard" class="result-card" hidden>
+                        <div class="result-top">
+                            <span class="ready"><i></i> Ready to share</span>
+                            <span id="resultCode" class="code-pill"></span>
+                        </div>
+                        <a id="shortUrl" class="short-url" href="#" target="_blank" rel="noreferrer"></a>
                         <div class="result-actions">
-                            <button id="copyBtn" type="button">Copy</button>
-                            <a id="openBtn" href="#" target="_blank" rel="noreferrer">Open ↗</a>
+                            <button id="copyBtn" class="soft-action" type="button">Copy link</button>
+                            <a id="openBtn" class="soft-action" href="#" target="_blank" rel="noreferrer">Open ↗</a>
                         </div>
                     </div>
                 </section>
             </div>
         </section>
 
-        <section class="explain-grid">
-            <article>
-                <span class="accent cyan"></span>
-                <small>FRONTEND</small>
-                <h3>Send JSON</h3>
-                <p>JavaScript sends the long URL and alias to the Go API.</p>
-            </article>
-            <article>
-                <span class="accent violet"></span>
-                <small>BACKEND</small>
-                <h3>Create a code</h3>
-                <p>Go validates the URL and stores code → URL in memory.</p>
-            </article>
-            <article>
-                <span class="accent amber"></span>
-                <small>REDIRECT</small>
-                <h3>Open the target</h3>
-                <p>Visiting /code finds the original URL and redirects to it.</p>
-            </article>
+        <div class="ticker" aria-hidden="true">
+            <div class="ticker-track">
+                <span><b>01</b> Paste destination</span>
+                <span><b>02</b> Validate URL</span>
+                <span><b>03</b> Generate or use alias</span>
+                <span><b>04</b> Store mapping</span>
+                <span><b>05</b> Return short URL</span>
+                <span><b>06</b> Redirect on visit</span>
+                <span><b>01</b> Paste destination</span>
+                <span><b>02</b> Validate URL</span>
+            </div>
+        </div>
+
+        <section id="live" class="live-section">
+            <div class="container">
+                <div class="section-head">
+                    <div>
+                        <div class="kicker mono">Live session view</div>
+                        <h2 class="section-title">See the shortener work.</h2>
+                    </div>
+                    <p class="section-copy">This panel uses only your current browser session. Each successful API request updates the metrics and adds its real response time to the chart.</p>
+                </div>
+
+                <div class="dashboard-shell organic-surface">
+                    <div class="dash-top">
+                        <div><strong>QuickLink workspace</strong><span>Real browser-session activity</span></div>
+                        <span class="live-badge"><i></i> API ready</span>
+                    </div>
+
+                    <div class="dash-grid">
+                        <aside class="dash-side">
+                            <div class="mono side-label">Flow</div>
+                            <div class="dash-nav">
+                                <span class="active">Session <i></i></span>
+                                <span>POST /api/shorten <i></i></span>
+                                <span>GET /:code <i></i></span>
+                            </div>
+                            <div class="side-note">
+                                <small>Storage</small>
+                                <b>In-memory map</b>
+                                <p>Restarting the Go server clears saved links.</p>
+                            </div>
+                        </aside>
+
+                        <div class="dash-main">
+                            <div class="metric-row">
+                                <article class="metric metric-cyan">
+                                    <small>Links this session</small>
+                                    <b id="sessionLinks">0</b>
+                                    <span>successful creates</span>
+                                </article>
+                                <article class="metric metric-violet">
+                                    <small>Last response</small>
+                                    <b><span id="lastLatency">—</span><em> ms</em></b>
+                                    <span>measured in browser</span>
+                                </article>
+                                <article class="metric metric-amber">
+                                    <small>Latest code</small>
+                                    <b id="latestCode">—</b>
+                                    <span>current short key</span>
+                                </article>
+                            </div>
+
+                            <article class="chart-card pressure-card">
+                                <div class="chart-head">
+                                    <div>
+                                        <strong>API response time</strong>
+                                        <span class="chart-subcopy">Successful shorten requests in this session</span>
+                                    </div>
+                                    <span id="chartWindow">No requests yet</span>
+                                </div>
+
+                                <div class="chart-legend"><span><i></i> Response time (ms)</span></div>
+
+                                <div class="latency-chart" id="latencyChartWrap">
+                                    <div id="chartEmpty" class="chart-empty">Create a short link to start the live chart.</div>
+                                    <svg id="latencyChart" viewBox="0 0 700 250" preserveAspectRatio="none" aria-label="API response latency chart">
+                                        <g class="chart-grid">
+                                            <line x1="48" y1="35" x2="680" y2="35"/>
+                                            <line x1="48" y1="85" x2="680" y2="85"/>
+                                            <line x1="48" y1="135" x2="680" y2="135"/>
+                                            <line x1="48" y1="185" x2="680" y2="185"/>
+                                            <line x1="48" y1="225" x2="680" y2="225"/>
+                                        </g>
+                                        <path id="latencyAreaPath" class="latency-area" d=""/>
+                                        <path id="latencyLinePath" class="latency-line" d=""/>
+                                        <g id="latencyDots"></g>
+                                    </svg>
+                                    <div id="latencyTooltip" class="chart-float" hidden><small>Latest request</small><b>— ms</b><span>POST /api/shorten</span></div>
+                                </div>
+
+                                <div class="chart-insights">
+                                    <div><span>Fastest</span><b id="fastestLatency">—</b></div>
+                                    <div><span>Average</span><b id="averageLatency">—</b></div>
+                                    <div><span>Latest</span><b id="latestLatencyInsight">—</b></div>
+                                </div>
+                            </article>
+                        </div>
+
+                        <aside class="dash-right">
+                            <div class="mono side-label">Current link</div>
+                            <div class="status-ring" id="statusRing">
+                                <div class="ring-center"><strong id="ringValue">0</strong><span>created</span></div>
+                            </div>
+                            <div class="current-link-card">
+                                <small>Latest short URL</small>
+                                <b id="dashboardShortUrl">Waiting for a link</b>
+                                <p id="dashboardStatus">Submit the form above and this panel will update instantly.</p>
+                            </div>
+                        </aside>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="how" class="how-section">
+            <div class="container">
+                <div class="section-head">
+                    <div>
+                        <div class="kicker mono">Simple architecture</div>
+                        <h2 class="section-title">Three parts. One clear flow.</h2>
+                    </div>
+                    <p class="section-copy">The frontend only sends and displays data. Go owns validation and redirects. The memory store keeps the short-code mapping while the server is running.</p>
+                </div>
+
+                <div class="process-grid">
+                    <article class="process-card dark">
+                        <span>01 / Browser</span>
+                        <h3>Send the URL</h3>
+                        <p>JavaScript sends the long URL and optional alias as JSON to <code>POST /api/shorten</code>.</p>
+                    </article>
+                    <article class="process-card">
+                        <span>02 / Go handler</span>
+                        <h3>Validate & save</h3>
+                        <p>The handler validates the destination, chooses a code, then saves <code>code → URL</code> in memory.</p>
+                    </article>
+                    <article class="process-card">
+                        <span>03 / Redirect</span>
+                        <h3>Open the target</h3>
+                        <p>Visiting <code>/:code</code> finds the original URL and returns an HTTP 302 redirect.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <div class="container">
+                <div class="cta-panel organic-surface">
+                    <div class="mono">QuickLink / Go standard library</div>
+                    <h2>Small backend. Polished frontend. Easy to explain.</h2>
+                    <p>The project stays intentionally compact while the interface carries the full V6 organic product language.</p>
+                    <a class="wave-btn" href="#shorten">
+                        <span>Shorten another</span>
+                        <svg viewBox="0 0 220 60" preserveAspectRatio="none" aria-hidden="true"><path d="M30 3 C55 9 78 0 106 5 C136 10 158 1 190 6 L218 30 L190 54 C160 59 136 50 108 55 C80 60 55 50 30 57 L2 30 Z"/></svg>
+                    </a>
+                </div>
+            </div>
         </section>
     </main>
 
     <footer>
-        <span>QuickLink</span>
-        <span>Go standard library · No database · Easy to explain</span>
+        <div class="container footer-row"><span>QuickLink · Go URL Shortener</span><span>In-memory storage · responsive V6 interface</span></div>
     </footer>
 
     <script src="/static/script.js"></script>
